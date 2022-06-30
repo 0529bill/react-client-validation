@@ -7,8 +7,8 @@
     "clean": "rm -rf dist",
     "start": "rollup -c -w",
     "build": "rm -rf dist/ && rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "semantic-release": "semantic-release"
+    "publish:minor": "npm version minor",
+    "publish:patch": "npm"
   },
   "keywords": [
     "react",
@@ -24,8 +24,7 @@
   },
   "devDependencies": {
     "rollup": "^2.75.7",
-    "rollup-plugin-terser": "^7.0.2",
-    "semantic-release": "^19.0.3"
+    "rollup-plugin-terser": "^7.0.2"
   },
   "repository": {
     "type": "git",
