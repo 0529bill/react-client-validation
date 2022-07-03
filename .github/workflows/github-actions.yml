@@ -6,4 +6,3 @@ release:
   steps:
     - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
     - run: npm run build
-    - run: np

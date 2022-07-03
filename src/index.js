@@ -1,18 +1,3 @@
-import PropTypes from 'prop-types';
-
-/**
- *
- * @param {array} errorArray
- *      @param {string} index    驗證的Id/key
- *      @param {array} condition 驗證的條件式 可以為單一array或是多個array ex.[ condition1, condition2 ] or [condition1]
- *      @param {func} customCondition
- *        @returns [true, false, ... ] 應回傳 array  回傳格式必須為 ex. [true, false, true, false, false ...]
- *      @param {string} errorMessage 不符合驗證後回傳的 i18n內容
- *
- * @param {*} dataSource 用在有 customValidate時做自定義驗證
- * @param {*} defaultErrorMessage
- */
-
 const handleValidation = ({
   errorArray = [],
   dataSource = [],
@@ -30,44 +15,102 @@ const handleValidation = ({
     return true;
   };
 
+  const setNestedErrorMessage = (
+    tempErrorObject,
+    currentIndex,
+    errorFormat,
+    errorResult
+  ) => {
+    const format = errorFormat.shift();
+    const targetIndex = format === 'index' ? currentIndex : format;
+    if (errorFormat.length === 0) {
+      tempErrorObject[targetIndex] = errorResult;
+      return;
+    }
+    tempErrorObject[targetIndex] = {};
+    setNestedErrorMessage(
+      tempErrorObject[targetIndex],
+      currentIndex,
+      errorFormat,
+      errorResult
+    );
+  };
+  å;
+
   errorArray.forEach((item) => {
     if (!Array.isArray(item?.condition) && !item?.customCondition) {
-      // eslint-disable-next-line no-console
-      return console.error('condition must be an array!');
+      return console.error(
+        `Invalid type \`${typeof !item?.condition}"\` supplied to parameter "condition", expected \`array\`;
+          type \`${typeof !item?.customCondition}"\` supplied to parameter "customCondition", expected \`function\
+        `
+      );
     }
 
     if (typeof item?.index !== 'string') {
       // eslint-disable-next-line no-console
-      return console.error('index must be string!');
+      return console.error(
+        `Invalid type \`${typeof item?.index}"\` supplied to parameter "index", expected \`string\`!`
+      );
     }
 
     // 有傳customValidate的情況
     if (item?.customCondition) {
       errorValidation[item.index] = [];
+      let conditionReturnArray = [false, false];
 
-      //validatedResult ex. [true, true, false, false, true]
-      const validatedResult = item.customCondition(dataSource);
-
-      if (!Array.isArray(validatedResult)) {
+      //conditionReturnArray ex. [true, true, false, false, true]
+      item.customCondition(dataSource, conditionReturnArray);
+      if (!Array.isArray(conditionReturnArray)) {
         // eslint-disable-next-line no-console
-        return console.error('customCondition must be an array!');
+        return console.error(
+          `Invalid type \`${typeof conditionReturnArray}"\` return from parameter "customValidation", expected \`array\`!`
+        );
       }
-      if (validatedResult.length) {
+      if (conditionReturnArray.length) {
+        let returnObject = item?.multiple ? [] : null;
         //輸出errorValidation  錯誤的值用error message 正確的值設定為null      ex. [{msg: Message},  null, {msg: Message}]
-        validatedResult.forEach((result, index) => {
+        conditionReturnArray.forEach((result, index) => {
           let value = true;
           if (!result) {
             value = false;
             isPass = false;
           }
 
+          const tempErrorObject = {};
+          let targetTempErrorObject;
+
           const errorResult = value
             ? null
             : item?.errorMessage
             ? { msg: item?.errorMessage }
             : defaultMessage;
-          errorValidation[item.index][index] = errorResult;
+
+          if (item?.errorFormat && errorResult) {
+            const tempErrorFormat = item?.errorFormat.slice();
+            setNestedErrorMessage(
+              tempErrorObject,
+              index,
+              tempErrorFormat,
+              errorResult
+            );
+            targetTempErrorObject =
+              Object.keys(tempErrorObject).length === 0
+                ? null
+                : tempErrorObject;
+
+            if (item?.multiple) {
+              returnObject.push(targetTempErrorObject);
+            } else {
+              returnObject = targetTempErrorObject;
+            }
+          } else if (item?.multiple) {
+            returnObject.push(errorResult);
+          } else {
+            returnObject = errorResult;
+          }
         });
+        errorValidation[item.index] = returnObject;
+        //    errorValidation[item.index][index] = errorResult;
       }
       return;
     } else {
@@ -81,17 +124,6 @@ const handleValidation = ({
     }
   });
   return [isPass, errorValidation];
-};
-
-handleValidation.propTypes = {
-  errorArray: PropTypes.array.isRequired,
-  dataSource: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-    PropTypes.number,
-    PropTypes.object,
-  ]),
-  defaultErrorMessage: PropTypes.string,
 };
 
 export default handleValidation;
