@@ -67,7 +67,8 @@ const handleValidation = ({
         );
       }
       if (conditionReturnArray.length) {
-        let returnObject = item?.multiple ? [] : null;
+        const multiple = conditionReturnArray.length > 1;
+        let returnObject = multiple ? [] : null;
         //輸出errorValidation  錯誤的值用error message 正確的值設定為null      ex. [{msg: Message},  null, {msg: Message}]
         conditionReturnArray.forEach((result, index) => {
           let value = true;
@@ -98,12 +99,12 @@ const handleValidation = ({
                 ? null
                 : tempErrorObject;
 
-            if (item?.multiple) {
+            if (multiple) {
               returnObject.push(targetTempErrorObject);
             } else {
               returnObject = targetTempErrorObject;
             }
-          } else if (item?.multiple) {
+          } else if (multiple) {
             returnObject.push(errorResult);
           } else {
             returnObject = errorResult;
