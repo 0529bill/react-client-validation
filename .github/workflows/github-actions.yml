@@ -1,8 +1,8 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-release:
-  runs-on: ubuntu-latest
-  steps:
-    - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-    - run: npm run build
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: npm run build
