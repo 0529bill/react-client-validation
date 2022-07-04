@@ -4,11 +4,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install npm dependencies
-        uses: actions/checkout@master
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: get file
+        uses: ./.github/actions/github-actions
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          token: ${{secrets.TOKEN_GITHUB}}
-      - name: Install npm dependencies
-        run: npm install
-        run: npm run build
+          node-version: 16.15.0
+          cache: npm
+      - name: Install
+        run: npm i
+      - name: Build
+      - run: npm run build
