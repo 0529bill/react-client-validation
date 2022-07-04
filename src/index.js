@@ -35,7 +35,6 @@ const handleValidation = ({
       errorResult
     );
   };
-  å;
 
   errorArray.forEach((item) => {
     if (!Array.isArray(item?.condition) && !item?.customCondition) {
