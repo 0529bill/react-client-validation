@@ -7,7 +7,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: get file
-        uses: ./.github/actions/github-actions
+        uses: ./.github/workflows/github-actions
       - name: Setup node
         uses: actions/setup-node@v3
         with:
