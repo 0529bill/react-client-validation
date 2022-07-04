@@ -5,5 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: cd /home/runner/work/react-client-validation/package.json
+      - name: Install npm dependencies
+        run: npm install
+      - name: npm init
+        run: npm init -y
       - run: npm run build
