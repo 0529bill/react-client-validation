@@ -55,7 +55,7 @@ const handleValidation = ({
     // 有傳customValidate的情況
     if (item?.customCondition) {
       errorValidation[item.index] = [];
-      let conditionReturnArray = [false, false];
+      let conditionReturnArray = [];
 
       //conditionReturnArray ex. [true, true, false, false, true]
       item.customCondition(dataSource, conditionReturnArray);
