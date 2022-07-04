@@ -4,5 +4,12 @@ jobs:
   release:
     runs-on: ubuntu-latest
       steps:
-        - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-        - run: npm run build
+        - uses: actions/checkout@v2
+        - name: Use Node.js
+          uses: actions/setup-node@v2
+            with: 
+              node-version: "14.x"
+        - name: Install dependencies
+          run: npm install
+        - name: Run build
+          run: npm run build
