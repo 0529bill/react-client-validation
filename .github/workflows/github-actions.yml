@@ -10,11 +10,6 @@ jobs:
         uses: 0529bill/react-client-validation@master
         env:
           GITHUB_TOKEN: ${{secrets.TOKEN_GITHUB}}
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.15.0
-          cache: npm
       - name: Install
         run: npm i
       - name: Build
