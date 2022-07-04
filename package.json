@@ -1,6 +1,6 @@
 {
   "name": "react-client-validation",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "client-side validation for react application",
   "main": "dist/index.min.js",
   "scripts": {
