@@ -7,6 +7,4 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - name: Install npm dependencies
         run: npm install
-      - name: npm init
-        run: npm init -y
       - run: npm run build
