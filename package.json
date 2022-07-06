@@ -8,7 +8,7 @@
     "start": "rollup -c -w",
     "build": "rm -rf dist/ && rollup -c",
     "publish:minor": "npm version minor && npm publish",
-    "publish:patch": "npm version patch && npm publish",
+    "publish:patch": "npm version patch --no-git-tag-version && npm publish",
     "publish:major": "npm version major && npm publish"
   },
   "keywords": [
@@ -19,7 +19,7 @@
     "dist"
   ],
   "author": "water-tw",
-  "license": "MIC",
+  "license": "MIT",
   "dependencies": {
     "prop-types": "^15.8.1"
   },
