@@ -7,6 +7,7 @@
     "clean": "rm -rf dist",
     "start": "rollup -c -w",
     "build": "rm -rf dist/ && rollup -c",
+    "publish:message": "git add . && git commit -m 'feat: update to npm'",
     "publish:minor": "npm version minor && npm publish",
     "publish:patch": "npm version patch --no-git-tag-version && npm publish",
     "publish:major": "npm version major && npm publish"
