@@ -1,13 +1,13 @@
 const handleValidation = ({
   errorArray = [],
   dataSource = [],
-  defaultErrorMessage = '',
+  defaultErrorMessage = "",
 }) => {
   let isPass = true;
   const errorValidation = {};
   const defaultMessage = defaultErrorMessage
     ? { msg: defaultErrorMessage }
-    : '';
+    : "";
 
   // 接受 condition 為 [ condition1, condition2]
   const handleValidateItem = (errorItem) => {
@@ -24,7 +24,7 @@ const handleValidation = ({
     errorResult
   ) => {
     const format = errorFormat.shift();
-    const targetIndex = format === 'index' ? currentIndex : format;
+    const targetIndex = format === "index" ? currentIndex : format;
     if (errorFormat.length === 0) {
       tempErrorObject[targetIndex] = errorResult;
       return;
@@ -47,7 +47,7 @@ const handleValidation = ({
       );
     }
 
-    if (typeof item?.index !== 'string') {
+    if (typeof item?.index !== "string") {
       // eslint-disable-next-line no-console
       return console.error(
         `Invalid type \`${typeof item?.index}"\` supplied to parameter "index", expected \`string\`!`

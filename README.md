@@ -1,5 +1,7 @@
 # React-Client-Validation
 
+[![npm version](https://badge.fury.io/js/react-client-validation.svg)](https://badge.fury.io/js/react-client-validation)
+
 ## Installation
 
 ```js
@@ -23,6 +25,7 @@ const loginValidation = [
   },
   {
     index: "password",
+    //change errorObject's format
     errorFormat: ["invalidPassword"],
     customCondition: (data, errorReturnArray) => {
       if (data.password) {
@@ -32,7 +35,7 @@ const loginValidation = [
   },
 ];
 
-const [isPass, loginValidationError] = handleValidation({
+const [isPass, loginErrorObject] = handleValidation({
   errorArray: loginValidation,
   defaultErrorMessage: "input can't be blank",
 });
@@ -40,11 +43,12 @@ const [isPass, loginValidationError] = handleValidation({
 
 ```js
 console.log(isPass); // boolean, true or false
-console.log(loginValidationError);
+console.log(loginErrorObject);
 
 {
     username: {msg: 'User name is not valid!'},
     password: [ invalidPassword: {msg: "input can't be blank"}]
+    //password's value is formatted based on errorFormat from the errorArray
 }
 ```
 
@@ -55,14 +59,35 @@ console.log(loginValidationError);
 2. dataSource: any (is isRequired if using customCondition)
 
 3. errorArray: Array (isRequired)
+   - condition: Array (pick one between condition or customCondition)
+   - customCondition: Function (pick one between condition or customCondition): (dataSource, returnArray) => [true, false....]
+   - index: string (isRequired): will be the key for the return error Object.
+   - errorMessage: string: will be the value for the return error message.
+   - errorFormat: Array (only allowed when using customCondition) set custom format.
 
-- condition: Array (pick one between condition or customCondition)
-- index: string (isRequired): will be the key for the return error Object.
-- errorMessage: string: will be the value for the return error message.
-- errorFormat: Array (only allowed when using customCondition) set custom format.
+## Example
+
+### errorFormat
 
 ```js
 //errorFormat example
+//only allowed when using customCondition
+
+
+
+1. without errorFormat
+
+{ ...,
+  customCondition: ...,
+}
+//returned error object
+
+{
+    username: {msg:'User name is not valid!'}
+}
+
+
+2. with errorFormat
 //scenario 1
 
 {
@@ -98,7 +123,7 @@ console.log(loginValidationError);
 
 ```
 
-- customCondition: Function (pick one between condition or customCondition): (dataSource, returnArray) => [true, false....]
+### customCondition
 
 ```js
 
@@ -118,3 +143,7 @@ customCondition: (data, errorReturnArray) => {
         }
 }
 ```
+
+## License
+
+Released under [MIT License](LICENSE.md).

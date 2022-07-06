@@ -19,7 +19,7 @@
     "dist"
   ],
   "author": "water-tw",
-  "license": "ISC",
+  "license": "MIC",
   "dependencies": {
     "prop-types": "^15.8.1"
   },
