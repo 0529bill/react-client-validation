@@ -15,30 +15,30 @@ npm i react-client-validation
 ## Quick start
 
 ```js
-import handleValidation from "react-client-validation";
+import handleValidation from 'react-client-validation'
 
 const loginValidation = [
   {
-    index: "username",
+    index: 'username',
     condition: [!username],
-    errorMessage: "User name is not valid!",
+    errorMessage: 'User name is not valid!',
   },
   {
-    index: "password",
+    index: 'password',
     //change errorObject's format
-    errorFormat: ["invalidPassword"],
+    errorFormat: ['invalidPassword'],
     customCondition: (data, errorReturnArray) => {
       if (data.password) {
-        errorReturnArray.push(false);
+        errorReturnArray.push(false)
       }
     },
   },
-];
+]
 
 const [isPass, loginErrorObject] = handleValidation({
   errorArray: loginValidation,
   defaultErrorMessage: "input can't be blank",
-});
+})
 ```
 
 ```js
@@ -126,6 +126,7 @@ console.log(loginErrorObject);
 ### customCondition
 
 ```js
+
 
 //customCondition example
 
