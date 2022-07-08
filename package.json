@@ -10,7 +10,9 @@
     "publish:message": "git add . && git commit -m 'feat: update to npm'",
     "publish:minor": "npm version minor && npm publish",
     "publish:patch": "npm version patch --no-git-tag-version && npm publish",
-    "publish:major": "npm version major && npm publish"
+    "publish:major": "npm version major && npm publish",
+    "git": "git config --global user.email 0529bilL@gmail.com && git config --global user.name 'bill'",
+    "git:commit": "git add . && git commit -m 'fix: build'"
   },
   "keywords": [
     "react",
