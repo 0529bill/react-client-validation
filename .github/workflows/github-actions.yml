@@ -13,5 +13,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run test
-        run: npm run build && npm run git && npm run publish:message && npm version patch && npm publish
+      - name: npm build
+        run: npm run build && npm run git
+
+      - name: npm publish
+        run: npm run publish:message && npm version patch && npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.TOKEN_NPM}}
