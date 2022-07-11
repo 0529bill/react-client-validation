@@ -5,7 +5,7 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: 'dist/index.min.ts',
+      file: 'dist/index.min.js',
       format: 'cjs',
       sourcemap: true,
     },
