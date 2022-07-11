@@ -145,6 +145,12 @@ customCondition: (data, errorReturnArray) => {
 }
 ```
 
+## Contract Me
+
+[Github](https://github.com/0529bill/react-client-validation)
+
+Email 0529bill@gmail.com
+
 ## License
 
 Released under [MIT License](LICENSE.md).
