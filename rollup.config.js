@@ -1,13 +1,14 @@
-import { terser } from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser'
+import typescript from '@rollup/plugin-typescript'
 
 export default [
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: {
-      file: 'dist/index.min.js',
+      file: 'dist/index.min.ts',
       format: 'cjs',
       sourcemap: true,
     },
-    plugins: [terser()],
+    plugins: [terser(), typescript()],
   },
-];
+]

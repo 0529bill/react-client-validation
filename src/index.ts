@@ -1,18 +1,40 @@
+interface ErrorObject {
+  index: string
+  condition: boolean[]
+  errorMessage?: string
+  customCondition?: (dataSource: unknown, conditionReturnArray: boolean[]) => void
+  errorFormat?: string[]
+}
+
+type errorResult = {
+  msg: string
+}
+
+type errorValidation = {
+  [key: string | number]: errorResult | '' | string | (string | errorResult | null)[]
+}
+
 const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessage = '' }) => {
   let isPass = true
-  const errorValidation = {}
+  const errorValidation: errorValidation = {}
   const defaultMessage = defaultErrorMessage ? { msg: defaultErrorMessage } : ''
 
   // 接受 condition 為 [ condition1, condition2]
-  const handleValidateItem = (errorItem) => {
-    if (errorItem.condition.every((error) => error !== false)) {
+  const handleValidateItem = (errorItem: ErrorObject) => {
+    if (errorItem.condition.every((error: boolean) => error !== false)) {
       return false
     }
     return true
   }
 
-  const setNestedErrorMessage = (tempErrorObject, currentIndex, errorFormat, errorResult) => {
+  const setNestedErrorMessage = (
+    tempErrorObject: Record<number | string, {} | errorResult>,
+    currentIndex: number,
+    errorFormat: string[],
+    errorResult: errorResult
+  ) => {
     const format = errorFormat.shift()
+    if (!format) return
     const targetIndex = format === 'index' ? currentIndex : format
     if (errorFormat.length === 0) {
       tempErrorObject[targetIndex] = errorResult
@@ -22,7 +44,7 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
     setNestedErrorMessage(tempErrorObject[targetIndex], currentIndex, errorFormat, errorResult)
   }
 
-  errorArray.forEach((item) => {
+  errorArray.forEach((item: ErrorObject) => {
     if (!Array.isArray(item?.condition) && !item?.customCondition) {
       return console.error(
         `Invalid type \`${typeof !item?.condition}"\` supplied to parameter "condition", expected \`array\`;
@@ -40,8 +62,8 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
 
     // 有傳customValidate的情況
     if (item?.customCondition) {
-      errorValidation[item.index] = []
-      const conditionReturnArray = []
+      // errorValidation[item.index] = []
+      const conditionReturnArray: boolean[] = []
 
       // conditionReturnArray ex. [true, true, false, false, true]
       item.customCondition(dataSource, conditionReturnArray)
@@ -53,7 +75,9 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
       }
       if (conditionReturnArray.length) {
         const multiple = conditionReturnArray.length > 1
-        let returnObject = multiple ? [] : null
+        let returnObject: (null | errorResult | string)[] | string | errorResult | null = multiple
+          ? []
+          : ''
         // 輸出errorValidation  錯誤的值用error message 正確的值設定為null      ex. [{msg: Message},  null, {msg: Message}]
         conditionReturnArray.forEach((result, index) => {
           let value = true
@@ -62,31 +86,51 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
             isPass = false
           }
 
-          const tempErrorObject = {}
-          let targetTempErrorObject
+          const tempErrorObject: any = {}
+          // let targetTempErrorObject: string[] | null | {} | undefined
+          let targetTempErrorObject: errorResult | null
 
-          const errorResult = value
+          const errorResult: errorResult | null | '' = value
             ? null
             : item?.errorMessage
             ? { msg: item?.errorMessage }
             : defaultMessage
 
           if (item?.errorFormat && errorResult) {
+            if (!Array.isArray(item?.errorFormat)) {
+              // eslint-disable-next-line no-console
+              return console.error(
+                `Invalid type \`${typeof item?.errorFormat}"\` return from parameter "errorFormat", expected \`array\`!`
+              )
+            }
+
             const tempErrorFormat = item?.errorFormat.slice()
             setNestedErrorMessage(tempErrorObject, index, tempErrorFormat, errorResult)
             targetTempErrorObject =
               Object.keys(tempErrorObject).length === 0 ? null : tempErrorObject
 
-            if (multiple) {
+            if (multiple && Array.isArray(returnObject)) {
               returnObject.push(targetTempErrorObject)
             } else {
               returnObject = targetTempErrorObject
             }
-          } else if (multiple) {
+          } else if (multiple && Array.isArray(returnObject)) {
             returnObject.push(errorResult)
           } else {
             returnObject = errorResult
           }
+
+          // if (multiple) {
+          //   if (Array.isArray(returnObject)) {
+          //     if (targetTempErrorObject) {
+          //       returnObject.push(targetTempErrorObject)
+          //     } else {
+          //       returnObject = targetTempErrorObject
+          //     }
+          //   }
+          // } else {
+          //   returnObject =  errorResult
+          // }
         })
         errorValidation[item.index] = returnObject
         //    errorValidation[item.index][index] = errorResult;
