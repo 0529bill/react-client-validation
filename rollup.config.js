@@ -9,6 +9,6 @@ export default [
       format: 'cjs',
       sourcemap: true,
     },
-    plugins: [terser(), typescript()],
+    plugins: [terser(), typescript({ tsconfig: './tsconfig.json' })],
   },
 ]
