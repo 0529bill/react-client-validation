@@ -119,21 +119,8 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
           } else {
             returnObject = errorResult
           }
-
-          // if (multiple) {
-          //   if (Array.isArray(returnObject)) {
-          //     if (targetTempErrorObject) {
-          //       returnObject.push(targetTempErrorObject)
-          //     } else {
-          //       returnObject = targetTempErrorObject
-          //     }
-          //   }
-          // } else {
-          //   returnObject =  errorResult
-          // }
         })
         errorValidation[item.index] = returnObject
-        //    errorValidation[item.index][index] = errorResult;
       }
     } else {
       const isValidated = handleValidateItem(item)
