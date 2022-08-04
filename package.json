@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "client-side validation for react application",
   "main": "dist/index.min.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
     "start": "rollup -c -w",
