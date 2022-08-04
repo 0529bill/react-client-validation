@@ -59,7 +59,7 @@ console.log(loginErrorObject);
 2. dataSource: any (is isRequired if using customCondition)
 
 3. errorArray: Array (isRequired)
-   - condition: Array (pick one between condition or customCondition)
+   - condition: (string | number | boolean | undefined | null)[] (pick one between condition or customCondition)
    - customCondition: Function (pick one between condition or customCondition): (dataSource, returnArray) => [true, false....]
    - index: string (isRequired): will be the key for the return error Object.
    - errorMessage: string: will be the value for the return error message.

@@ -1,6 +1,6 @@
 interface ErrorObject {
   index: string
-  condition: boolean[]
+  condition: (string | number | boolean | undefined | null)[]
   errorMessage?: string
   // eslint-disable-next-line no-unused-vars
   customCondition?: (dataSource: unknown, conditionReturnArray: boolean[]) => boolean[]
@@ -12,7 +12,7 @@ type ErrorResult = {
 }
 
 type ErrorValidation = {
-  [key: string | number]: ErrorResult | '' | string | (string | ErrorResult | null)[]
+  [key: string | number]: ErrorResult | '' | string | null | (string | ErrorResult | null)[]
 }
 
 const handleValidation = ({
@@ -30,7 +30,7 @@ const handleValidation = ({
 
   // 接受 condition 為 [ condition1, condition2]
   const handleValidateItem = (errorItem: ErrorObject) => {
-    if (errorItem.condition.every((error: boolean) => error !== false)) {
+    if (errorItem.condition.every((error) => error !== false)) {
       return false
     }
     return true
