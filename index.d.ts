@@ -20,3 +20,4 @@ export declare const handleValidation: ({
   dataSource?: unknown
   defaultErrorMessage?: string | undefined
 }) => (boolean | ErrorValidation)[]
+export default handleValidation
