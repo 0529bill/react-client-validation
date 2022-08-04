@@ -2,21 +2,30 @@ interface ErrorObject {
   index: string
   condition: boolean[]
   errorMessage?: string
-  customCondition?: (dataSource: unknown, conditionReturnArray: boolean[]) => void
+  // eslint-disable-next-line no-unused-vars
+  customCondition?: (dataSource: unknown, conditionReturnArray: boolean[]) => boolean[]
   errorFormat?: string[]
 }
 
-type errorResult = {
+type ErrorResult = {
   msg: string
 }
 
-type errorValidation = {
-  [key: string | number]: errorResult | '' | string | (string | errorResult | null)[]
+type ErrorValidation = {
+  [key: string | number]: ErrorResult | '' | string | (string | ErrorResult | null)[]
 }
 
-const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessage = '' }) => {
+const handleValidation = ({
+  errorArray = [],
+  dataSource = [],
+  defaultErrorMessage = '',
+}: {
+  errorArray: ErrorObject[]
+  dataSource?: unknown
+  defaultErrorMessage?: string
+}) => {
   let isPass = true
-  const errorValidation: errorValidation = {}
+  const errorValidation: ErrorValidation = {}
   const defaultMessage = defaultErrorMessage ? { msg: defaultErrorMessage } : ''
 
   // 接受 condition 為 [ condition1, condition2]
@@ -28,10 +37,10 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
   }
 
   const setNestedErrorMessage = (
-    tempErrorObject: Record<number | string, {} | errorResult>,
+    tempErrorObject: Record<number | string, {} | ErrorResult>,
     currentIndex: number,
     errorFormat: string[],
-    errorResult: errorResult
+    errorResult: ErrorResult
   ) => {
     const format = errorFormat.shift()
     if (!format) return
@@ -44,8 +53,9 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
     setNestedErrorMessage(tempErrorObject[targetIndex], currentIndex, errorFormat, errorResult)
   }
 
-  errorArray.forEach((item: ErrorObject) => {
+  errorArray.forEach((item: ErrorObject): void | typeof console => {
     if (!Array.isArray(item?.condition) && !item?.customCondition) {
+      // eslint-disable-next-line no-console
       return console.error(
         `Invalid type \`${typeof !item?.condition}"\` supplied to parameter "condition", expected \`array\`;
           type \`${typeof !item?.customCondition}"\` supplied to parameter "customCondition", expected \`function\
@@ -75,7 +85,7 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
       }
       if (conditionReturnArray.length) {
         const multiple = conditionReturnArray.length > 1
-        let returnObject: (null | errorResult | string)[] | string | errorResult | null = multiple
+        let returnObject: (null | ErrorResult | string)[] | string | ErrorResult | null = multiple
           ? []
           : ''
         // 輸出errorValidation  錯誤的值用error message 正確的值設定為null      ex. [{msg: Message},  null, {msg: Message}]
@@ -88,9 +98,9 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
 
           const tempErrorObject: any = {}
           // let targetTempErrorObject: string[] | null | {} | undefined
-          let targetTempErrorObject: errorResult | null
+          let targetTempErrorObject: ErrorResult | null
 
-          const errorResult: errorResult | null | '' = value
+          const errorResult: ErrorResult | null | '' = value
             ? null
             : item?.errorMessage
             ? { msg: item?.errorMessage }
@@ -106,6 +116,7 @@ const handleValidation = ({ errorArray = [], dataSource = [], defaultErrorMessag
 
             const tempErrorFormat = item?.errorFormat.slice()
             setNestedErrorMessage(tempErrorObject, index, tempErrorFormat, errorResult)
+            // eslint-disable-next-line operator-linebreak
             targetTempErrorObject =
               Object.keys(tempErrorObject).length === 0 ? null : tempErrorObject
 
