@@ -20,7 +20,8 @@
     "validation"
   ],
   "files": [
-    "dist"
+    "dist",
+    "index.d.ts"
   ],
   "author": "water-tw",
   "license": "MIT",
